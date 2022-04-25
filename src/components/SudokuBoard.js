@@ -24,7 +24,7 @@ function isValid(board, x, y, num) {
   return true;
 }
 
-export async function solveSudoku(board) {
+export async function solveSudoku(board) { // sometimes the board is not valid :shrug: and the function will fail
   for (var y = 0; y < 9; y++) {
     for (var x = 0; x < 9; x++) {
       if (board[y][x] == 0) {
