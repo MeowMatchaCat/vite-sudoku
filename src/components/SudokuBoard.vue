@@ -5,68 +5,72 @@
     <button @click="newGame">New Game</button>
   </div>
   <div class="info">
-    <div>{{difficulty}}</div>
-    <div>#{{index}}</div>
-  </div>
-  <div class="board">
-    <div v-for="row in board" class="row" :key="row">
-      <div v-for="item in row" class="item" :key="item"><div v-if="item !== 0">{{item}}</div></div>
-    </div>
+    <div>{{ difficulty }}</div>
+    <div>#{{ index }}</div>
   </div>
 
+  <div class="result">
+    {{ result ? "Solved" : "Not Solved" }}
+  </div>
+
+  <div class="board">
+    <div v-for="(row, y) in board" class="row" :key="row">
+      <div v-for="(item, x) in row" class="item" :key="x + ',' + y">
+        <div v-if="item !== 0">{{ item }}</div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 //import the sudoku.json
-import sudoku from './sudoku.json'
-import {solveSudoku} from './SudokuBoard.js';
+import sudoku from "./sudoku.json";
+import { solveSudoku } from "./SudokuBoard.js";
 
 export default {
-  name: 'SudokuBoard',
-  data: function() {
+  name: "SudokuBoard",
+  data: function () {
     return {
-      difficulties: ['very_easy', 'easy', 'medium', 'hard'],
+      difficulties: ["easy", "medium", "hard"],
       board: [
-          [8,5,2,9,7,6,2,4,3],
-          [6,7,9,1,4,3,2,8,5],
-          [0,3,1,2,5,8,7,6,9],
-          [3,1,4,5,2,7,8,9,6],
-          [7,6,8,3,9,1,4,5,0],
-          [9,2,5,6,0,0,3,7,1],
-          [5,4,3,8,6,2,9,1,7],
-          [1,9,7,4,3,5,0,2,8],
-          [2,8,6,7,1,9,5,3,4]
-          ],
-        difficulty: 'easy',
-        index: 0,
-        maps: //import the sudoku.json file as a dictionary
-          sudoku
-    }
+        [8, 5, 2, 9, 7, 6, 2, 4, 3],
+        [6, 7, 9, 1, 4, 3, 2, 8, 5],
+        [0, 3, 1, 2, 5, 8, 7, 6, 9],
+        [3, 1, 4, 5, 2, 7, 8, 9, 6],
+        [7, 6, 8, 3, 9, 1, 4, 5, 0],
+        [9, 2, 5, 6, 0, 0, 3, 7, 1],
+        [5, 4, 3, 8, 6, 2, 9, 1, 7],
+        [1, 9, 7, 4, 3, 5, 0, 2, 8],
+        [2, 8, 6, 7, 1, 9, 5, 3, 4],
+      ],
+      difficulty: "easy",
+      index: 0,
+      //import the sudoku.json file as a dictionary
+      maps: sudoku,
+      result: false,
+    };
   },
   methods: {
-    solve() {
-      solveSudoku([...this.board]);
+    async solve() {
+      this.result = await solveSudoku([...this.board]);
+      console.log(this.result);
     },
-    newGame(){
+    newGame() {
       //choose a random difficulty very easy, easy ,medium, hard,
-      var difficulty = this.difficulties[Math.floor(Math.random() * this.difficulties.length)];
+      var difficulty =
+        this.difficulties[Math.floor(Math.random() * this.difficulties.length)];
       this.index = Math.floor(Math.random() * this.maps[difficulty].length);
       this.difficulty = difficulty;
 
       this.board = this.maps[difficulty][this.index];
-      
-      
-     // console.log(this.board)
 
-    }
-  }
-}
-
-
+      // console.log(this.board)
+    },
+  },
+};
 </script>
 
 <style>
-
 .info {
   display: flex;
   flex-direction: row;
@@ -77,7 +81,6 @@ export default {
   padding: 10px;
 
   font-size: 20px;
-  
 }
 
 button {
@@ -108,22 +111,20 @@ button {
 
   /* every 3rd element give a green background */
 
- /* background: #ff00ff; */
-  
+  /* background: #ff00ff; */
 }
-
 
 /* rows 4,5,6 give board of green*/
 .item:nth-child(4),
 .item:nth-child(5),
 .item:nth-child(6) {
-  background:  #ADD8E6;
+  background: #add8e6;
 }
 
 .row:nth-child(4) .item,
 .row:nth-child(5) .item,
 .row:nth-child(6) .item {
-  background: #ADD8E6;
+  background: #add8e6;
 }
 
 /* 4 through 6 */
@@ -147,7 +148,6 @@ button {
   background: #fff;
 }
 
-
 .row:nth-child(6) .item:nth-child(4) {
   background: #fff;
 }
@@ -157,7 +157,4 @@ button {
 .row:nth-child(6) .item:nth-child(6) {
   background: #fff;
 }
-
-
-
 </style>
